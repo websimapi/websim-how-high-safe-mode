@@ -39,9 +39,9 @@ let realUnlocked = false;
 
 function gateValid() {
   const typed = (typeConfirm.value || '').trim().toUpperCase();
-  const ok = chk1.checked && chk2.checked && q1.checked && !q2.checked && typed === 'I ACCEPT';
+  const ok = chk1.checked && chk2.checked && typed === 'I ACCEPT';
   holdBtn.disabled = !ok;
-  gateNote.textContent = ok ? 'Press and hold to continue' : 'All four items must be completed.';
+  gateNote.textContent = ok ? 'Press and hold to continue' : 'Complete both checkboxes and type the phrase.';
 }
 [chk1,chk2,q1,q2,typeConfirm].forEach(el => el.addEventListener('input', gateValid));
 gateValid();
