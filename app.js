@@ -14,6 +14,7 @@ const heightOut = document.getElementById('heightOut');
 const heightOutFt = document.getElementById('heightOutFt');
 const bestOut = document.getElementById('bestOut');
 const bestOutFt = document.getElementById('bestOutFt');
+const whyLocked = document.getElementById('whyLocked');
 
 let holdTimer = null;
 let holdProgressTimer = null;
@@ -165,8 +166,11 @@ stopBtn.addEventListener('click', () => {
   stopBtn.disabled = true;
 });
 
+whyLocked?.addEventListener('click', () => {
+  alert('Real Throw Mode is permanently disabled to prevent injuries, property damage, and device loss. Please use Safe Mode (shake only).');
+});
+
 // Prevent accidental scroll during hold on iOS
 document.addEventListener('touchmove', (e) => {
   if (!gate.hasAttribute('hidden')) e.preventDefault();
 }, { passive: false });
-
