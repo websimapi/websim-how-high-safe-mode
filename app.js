@@ -16,9 +16,26 @@ const bestOut = document.getElementById('bestOut');
 const bestOutFt = document.getElementById('bestOutFt');
 const whyLocked = document.getElementById('whyLocked');
 
+const unlockReal = document.getElementById('unlockReal');
+const startReal = document.getElementById('startReal');
+const stopReal = document.getElementById('stopReal');
+const realReads = document.getElementById('realReads');
+const realHeightOut = document.getElementById('realHeightOut');
+const realHeightOutFt = document.getElementById('realHeightOutFt');
+const realBestOut = document.getElementById('realBestOut');
+const realBestOutFt = document.getElementById('realBestOutFt');
+const riskGate = document.getElementById('riskGate');
+const rchk1 = document.getElementById('rchk1');
+const rchk2 = document.getElementById('rchk2');
+const riskType = document.getElementById('riskType');
+const holdUnlock = document.getElementById('holdToUnlockReal');
+const riskHoldFill = document.getElementById('riskHoldFill');
+const riskNote = document.getElementById('riskNote');
+
 let holdTimer = null;
 let holdProgressTimer = null;
 let passedGate = false;
+let realUnlocked = false;
 
 function gateValid() {
   const typed = (typeConfirm.value || '').trim().toUpperCase();
@@ -174,3 +191,67 @@ whyLocked?.addEventListener('click', () => {
 document.addEventListener('touchmove', (e) => {
   if (!gate.hasAttribute('hidden')) e.preventDefault();
 }, { passive: false });
+
+/* Real Throw Mode logic */
+function riskValid() {
+  const typed = (riskType.value || '').trim().toUpperCase() === 'I ACCEPT RISK';
+  const ok = rchk1.checked && rchk2.checked && typed;
+  holdUnlock.disabled = !ok;
+  riskNote.textContent = ok ? 'Press and hold to unlock' : 'Complete all items to enable the button.';
+}
+[rchk1,rchk2,riskType].forEach(el => el.addEventListener('input', riskValid));
+
+unlockReal?.addEventListener('click', () => {
+  riskGate.removeAttribute('hidden');
+  riskValid();
+});
+
+holdUnlock.addEventListener('touchstart', startRiskHold);
+holdUnlock.addEventListener('mousedown', startRiskHold);
+holdUnlock.addEventListener('touchend', cancelRiskHold);
+holdUnlock.addEventListener('mouseup', cancelRiskHold);
+holdUnlock.addEventListener('mouseleave', cancelRiskHold);
+
+let riskHoldTimer=null, riskHoldProgress=null;
+function startRiskHold(e){
+  if (holdUnlock.disabled) return; e.preventDefault();
+  clearTimeout(riskHoldTimer); clearInterval(riskHoldProgress);
+  riskHoldFill.style.transition='width 0s'; riskHoldFill.style.width='0%';
+  const needMs=1800, start=performance.now();
+  riskHoldProgress=setInterval(()=>{const t=performance.now()-start; riskHoldFill.style.width=`${Math.min(1,t/needMs)*100}%`;},30);
+  riskHoldTimer=setTimeout(()=>{ clearInterval(riskHoldProgress); realUnlocked=true; riskGate.setAttribute('hidden','');
+    unlockReal.disabled=true; startReal.hidden=false; stopReal.hidden=false; realReads.hidden=false; },needMs);
+}
+function cancelRiskHold(){ clearTimeout(riskHoldTimer); clearInterval(riskHoldProgress); riskHoldFill.style.transition='width 0.2s ease'; riskHoldFill.style.width='0%'; }
+
+let realRunning=false, bestReal=0, freeStart=0, lastMag=G;
+function updateReal(h){
+  const m=Math.max(0,h), ft=m*3.28084;
+  realHeightOut.textContent=`${m.toFixed(2)} m`; realHeightOutFt.textContent=`${ft.toFixed(2)} ft`;
+  if(m>bestReal){ bestReal=m; realBestOut.textContent=`${bestReal.toFixed(2)} m`; realBestOutFt.textContent=`${(bestReal*3.28084).toFixed(2)} ft`; }
+}
+
+function onMotionReal(e){
+  if(!realRunning) return;
+  const ag=e.accelerationIncludingGravity||{}, ax=ag.x||0, ay=ag.y||0, az=ag.z||0;
+  const mag=Math.sqrt(ax*ax+ay*ay+az*az);
+  const t=performance.now();
+  const free = mag < 1.5; // near free-fall
+  if(!freeStart && free){ freeStart=t; }
+  if(freeStart && mag > 8.0){ // re-contact
+    const T=(t-freeStart)/1000; freeStart=0;
+    const h = (G*T*T)/8; updateReal(h);
+  }
+  lastMag=mag;
+}
+
+startReal.addEventListener('click', async () => {
+  if(!realUnlocked) return;
+  const ok = await ensureMotionPermission(); if(!ok){ alert('Motion permission denied.'); return; }
+  realRunning=true; freeStart=0; window.addEventListener('devicemotion', onMotionReal, {passive:true});
+  startReal.disabled=true; stopReal.disabled=false;
+});
+stopReal.addEventListener('click', () => {
+  realRunning=false; window.removeEventListener('devicemotion', onMotionReal);
+  startReal.disabled=false; stopReal.disabled=true;
+});

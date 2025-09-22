@@ -43,11 +43,24 @@
           <p id="hint" class="hint">Tip: a crisp upward snap gives you the most height.</p>
         </article>
 
-        <article class="card disabled" aria-disabled="true">
+        <article class="card" id="realCard">
           <h2>Real Throw Mode</h2>
-          <p class="danger">Locked and not provided. Throwing a phone is dangerous and can cause injury or damage.</p>
-          <button class="btn" disabled>Locked</button>
-          <button id="whyLocked" class="btn">Why locked?</button>
+          <p class="danger">High risk: throwing a phone can cause injury, damage, or loss. Proceed only if you fully accept the risk.</p>
+          <button id="unlockReal" class="btn">Unlock Real Throw Mode</button>
+          <button id="startReal" class="btn primary" hidden>Start Real Mode</button>
+          <button id="stopReal" class="btn" hidden disabled>Stop</button>
+          <div class="readouts" id="realReads" hidden>
+            <div class="readout">
+              <span class="label">Real height</span>
+              <span id="realHeightOut" class="value">0.00 m</span>
+              <span id="realHeightOutFt" class="value small">0.00 ft</span>
+            </div>
+            <div class="readout">
+              <span class="label">Best (real)</span>
+              <span id="realBestOut" class="value">0.00 m</span>
+              <span id="realBestOutFt" class="value small">0.00 ft</span>
+            </div>
+          </div>
         </article>
       </div>
     </section>
@@ -100,6 +113,18 @@
         <span id="holdFill" class="hold-fill" aria-hidden="true"></span>
       </button>
       <p id="gateNote" class="note">All four items must be completed.</p>
+    </div>
+  </section>
+
+  <section id="riskGate" class="gate" role="dialog" aria-modal="true" aria-labelledby="riskTitle" hidden>
+    <div class="gate-box">
+      <h2 id="riskTitle">Unlock Real Throw Mode</h2>
+      <p class="lead danger">You can seriously damage your device or get injured. Proceed only if you accept all risk.</p>
+      <label class="check"><input id="rchk1" type="checkbox" /><span>I accept full responsibility for any outcome.</span></label>
+      <label class="check"><input id="rchk2" type="checkbox" /><span>I will ensure a clear, safe area away from people and fragile items.</span></label>
+      <label class="typein">Type "I ACCEPT RISK" to continue:<input id="riskType" type="text" placeholder="I ACCEPT RISK" /></label>
+      <button id="holdToUnlockReal" class="btn primary hold" disabled>Press and hold to unlock<span id="riskHoldFill" class="hold-fill" aria-hidden="true"></span></button>
+      <p id="riskNote" class="note">Complete all items to enable the button.</p>
     </div>
   </section>
 
