@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>How High? (Safe Mode)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script type="importmap">
+  {
+    "imports": {}
+  }
+  </script>
+</head>
+<body>
+  <main class="app">
+    <header class="top">
+      <h1>How High?</h1>
+      <p class="tag">A motion game—safe mode only.</p>
+    </header>
+
+    <section class="panel">
+      <div class="cards">
+        <article class="card">
+          <h2>Safe Mode (Shake)</h2>
+          <p>Hold your phone securely. Shake upward to simulate a throw. Do not release your device.</p>
+          <button id="startBtn" class="btn primary">Start</button>
+          <button id="stopBtn" class="btn" disabled>Stop</button>
+          <div class="readouts">
+            <div class="readout">
+              <span class="label">Simulated height</span>
+              <span id="heightOut" class="value">0.00 m</span>
+              <span id="heightOutFt" class="value small">0.00 ft</span>
+            </div>
+            <div class="readout">
+              <span class="label">Best</span>
+              <span id="bestOut" class="value">0.00 m</span>
+              <span id="bestOutFt" class="value small">0.00 ft</span>
+            </div>
+          </div>
+          <p id="hint" class="hint">Tip: a crisp upward snap gives you the most height.</p>
+        </article>
+
+        <article class="card disabled" aria-disabled="true">
+          <h2>Real Throw Mode</h2>
+          <p class="danger">Locked and not provided. Throwing a phone is dangerous and can cause injury or damage.</p>
+          <button class="btn" disabled>Locked</button>
+        </article>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <small>Designed for mobile. Motion data stays on-device.</small>
+    </footer>
+  </main>
+
+  <section id="gate" class="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+    <div class="gate-box">
+      <h2 id="gateTitle">Read Before You Proceed</h2>
+      <p class="lead">Do not throw your phone. This app provides a Safe Mode that simulates height using shakes only.</p>
+      <ul class="bullets">
+        <li>Throwing a phone can cause injury, property damage, or device loss.</li>
+        <li>Use a firm grip. Keep a clear area. Avoid people, pets, and fragile items.</li>
+        <li>By continuing, you accept full responsibility for any outcome.</li>
+      </ul>
+
+      <div class="checks">
+        <label class="check">
+          <input id="chk1" type="checkbox" />
+          <span>I will NOT throw my phone. I will only use Safe Mode.</span>
+        </label>
+        <label class="check">
+          <input id="chk2" type="checkbox" />
+          <span>I understand I am responsible for any damage or injury.</span>
+        </label>
+      </div>
+
+      <div class="quiz">
+        <p class="q">Quick check:</p>
+        <label class="check">
+          <input id="q1" type="checkbox" />
+          <span>It is unsafe to release the device during play. (True)</span>
+        </label>
+        <label class="check">
+          <input id="q2" type="checkbox" />
+          <span>The app measures “real throws” by default. (False)</span>
+        </label>
+      </div>
+
+      <label class="typein">
+        Type “I ACCEPT” to continue:
+        <input id="typeConfirm" type="text" inputmode="text" autocomplete="off" placeholder="I ACCEPT" />
+      </label>
+
+      <button id="holdToProceed" class="btn primary hold" disabled>
+        Press and hold to continue
+        <span id="holdFill" class="hold-fill" aria-hidden="true"></span>
+      </button>
+      <p id="gateNote" class="note">All four items must be completed.</p>
+    </div>
+  </section>
+
+  <script type="module" src="app.js"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
+
